@@ -1,22 +1,28 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const productRouter = require('./src/routes/products')
 const userRouter = require('./src/routes/users')
 const morgan = require('morgan')
-
+const setCors = require('./src/middlewares/cors')
+const cors = require('cors')
+const port = process.env.PORT || 3500
 // middleware
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 app.use(morgan('dev'))
 // my middleware
 const myMiddleware = (req, res, next) => {
   console.log('my middleware di jalankan ');
+  const email = 'muhammadrisano@gamil.com'
+  req.myemail = email
   next()
 }
 
 app.use(myMiddleware)
-
+// app.use(setCors)
+app.use(cors())
 app.use('/products', productRouter)
 app.use('/users', userRouter)
 
@@ -71,6 +77,6 @@ app.use('*', (req, res)=>{
 //   res.send('about page ke ' + id + 'dan nama saya ' + name)
 // })
 
-app.listen(4000, ()=>{
-  console.log('server is running on port 4000');
+app.listen(port, ()=>{
+  console.log(`server is running on port ${port}`);
 })

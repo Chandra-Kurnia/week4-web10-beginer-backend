@@ -1,15 +1,12 @@
 
 const productModel = require('../models/products')
+const helpers = require('../helpers/helpers')
 
 const getAllProduct = (req, res, next) => {
   productModel.getAllproduct()
   .then((result)=>{
     const products = result
-    res.status(200)
-    res.json({
-      message: 'success',
-      data: products
-    })
+    helpers.response(res, products, 200)
   })
   .catch((error)=>{
     console.log(error);
@@ -35,17 +32,11 @@ const insertProduct = (req, res, next)=>{
   
   productModel.insertProduct(data)
   .then(()=>{
-    res.json({
-      message: 'data berhasil di insert',
-      data: data
-    })
+    helpers.response(res, data, 200)
   })
   .catch((error)=>{
     console.log(error);
-    res.status(500)
-    res.json({
-      message: 'internal server error'
-    })
+    helpers.response(res, null, 500, {message: 'internal server error'})
   })
 } 
 
