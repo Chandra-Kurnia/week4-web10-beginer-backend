@@ -1,5 +1,18 @@
 const connection = require('../configs/db')
 
+
+const getProductById =(id)=>{
+  return new Promise((resolve, reject) => {
+    connection.query("SELECT * FROM products where id = ?",id, (error, result) => {
+      if (!error) {
+        resolve(result)
+      } else {
+        reject(error)
+      }
+    })
+  })
+}
+
 const getAllproduct = ()=>{
   return new Promise((resolve, reject)=>{
     connection.query("SELECT * FROM products", (error, result) => {
@@ -52,5 +65,6 @@ module.exports = {
   getAllproduct,
   insertProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  getProductById
 }

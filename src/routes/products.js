@@ -18,6 +18,7 @@ const productController = require('../controllers/products')
 // }
 router
   .get('/', productController.getAllProduct)
+  .get('/:idsaya', productController.getProductById)
   .post('/', productController.insertProduct)
   .put('/:id', productController.updateProduct)
   .delete('/:id', productController.deleteProduct)
