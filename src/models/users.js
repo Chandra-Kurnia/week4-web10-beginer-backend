@@ -11,7 +11,18 @@ const insertUser = (data) => {
     })
   })
 }
-
+const findUser = (email) => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM users where email = ?', email, (error, result) => {
+      if (!error) {
+        resolve(result)
+      } else {
+        reject(error)
+      }
+    })
+  })
+}
 module.exports = {
-  insertUser
+  insertUser,
+  findUser
 }

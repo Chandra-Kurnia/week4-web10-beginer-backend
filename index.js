@@ -2,8 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const productRouter = require('./src/routes/products')
-const userRouter = require('./src/routes/users')
+const route = require('./src/routes/index')
 const morgan = require('morgan')
 const setCors = require('./src/middlewares/cors')
 const cors = require('cors')
@@ -26,8 +25,9 @@ const myMiddleware = async(req, res, next) => {
 app.use(myMiddleware)
 // app.use(setCors)
 app.use(cors())
-app.use('/products', productRouter)
-app.use('/users', userRouter)
+
+app.use('/v1', route)
+app.use('/file', express.static('./uploads'))
 
 app.use('*', (req, res, next)=>{
   const error = new createError.NotFound()
@@ -36,6 +36,7 @@ app.use('*', (req, res, next)=>{
   //   message: 'url not found'
   // })
 })
+
 
 
 app.use((err, req, res, next)=> {
