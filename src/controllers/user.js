@@ -4,6 +4,7 @@ const helpers = require('../helpers/helpers')
 const createError = require('http-errors')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
+const common = require('../helpers/common')
 
 const register = async (req, res, next) => {
   // const name = req.body.name
@@ -25,13 +26,19 @@ const register = async (req, res, next) => {
         name: name,
         email: email,
         password: hash,
-        phone: phone
+        phone: phone,
+        status: 0,
       }
 
       userModels.insertUser(data)
         .then((result) => {
           delete data.password
-          
+          // verifikasi user via email
+         
+          jwt.sign({ email: data.email }, process.env.SECRET_KEY, { expiresIn: '12h' }, function (err, token) {
+            common.sendEmail(data.email, token)
+            helpers.response(res, user, 200)
+          });
           helpers.response(res, data , 200)
         })
         .catch((error) => {
